@@ -119,8 +119,8 @@ class XiaomiArea implements Runnable {
 			JSONArray regions = (JSONArray) parse.get("data");
 			if (regions != null && regions.size() != 0) {
 				for (Object idKey : regions) {
-					JSONObject object = (JSONObject) idKey;
-					Map map = object;
+					Map<String,String> object = (Map<String,String>) idKey;
+					Map<String,String> map = object;
 					map.put("parentId", id);
 					areaService.insertArea(map);
 					System.out.println(object);

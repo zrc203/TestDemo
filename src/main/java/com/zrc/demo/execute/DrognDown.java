@@ -13,6 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -24,7 +30,6 @@ import com.alibaba.fastjson.JSONObject;
 
 public class DrognDown {
 	static String baseUrl = "http://ac.qq.com";
-	static int i = 1;
 	public static void main(String[] args) throws Exception{
 		getAcPic("http://ac.qq.com/Comic/comicInfo/id/505436");
 	}
@@ -54,37 +59,47 @@ public class DrognDown {
 		String chapName = chapTagA.text().replace(".", "").replace("?", "").replace("\"", "");
 		
 		Document aChapDoc = getUrlDocument(href);
-		Pattern p = Pattern.compile("var DATA        = '.*'");
+		Pattern p = Pattern.compile("var DATA += '(.*=)'");
 		String doc= aChapDoc.toString();
 		Matcher m = p.matcher(doc);
 		String data = "";
 		if(m.find()){
-			data =m.group();
+			data =m.group(1);
 		}
-		data=data.replaceAll("var DATA        = '", "").replaceAll("'", "").substring(1);
+		data=data.substring(1);
 		String decode = decode(data).replaceAll("@", "");
 		JSONObject dataObj = (JSONObject) JSONObject.parse(decode);
 		List<JSONObject> picList=(List<JSONObject>) dataObj.get("picture");
-		DecimalFormat df = new DecimalFormat("000000000");
+		DecimalFormat df = new DecimalFormat("00");
+		int i = 0;
 		for (JSONObject pic : picList) {
 			String picName = df.format(i);
-			OutputStream os = new FileOutputStream(rootPath+"\\"+picName+".png");
+			File chapDir = new File(rootPath+"\\"+chapName);
+			chapDir.mkdirs();
+			OutputStream os = new FileOutputStream(rootPath+"\\"+chapName+"\\"+picName+".png");
 			String picurl = pic.get("url").toString();
-			URL u = new URL(picurl);
-			URLConnection connection = u.openConnection();
-			connection.setConnectTimeout(450000);
-			InputStream is = connection.getInputStream();
+			InputStream is = getInputStreamByUrl(picurl);
 			IOUtils.copy(is, os);
 			is.close();
 			os.close();
-			
 			i++;
 		}
 		System.err.println(chapName+"----->完成");
 	}
+	public static InputStream getInputStreamByUrl(String url) throws Exception {
+		HttpClientBuilder builder = HttpClientBuilder.create();
+		HttpHost proxy = new HttpHost("BJC-S-TMG.synnex.org",8080);
+		HttpUriRequest request= new HttpGet(url);
+		CloseableHttpClient httpClient = builder.setUserAgent("chrome").setProxy(proxy).build();
+		CloseableHttpResponse response = httpClient.execute(request);
+		int code = response.getStatusLine().getStatusCode();
+		System.out.println(code);
+		InputStream inputStream = response.getEntity().getContent();
+		return inputStream;
+	}
 	public static Document getUrlDocument(String url){
 		try {
-			Connection conList = Jsoup.connect(url).header("User-Agent", "chrome").timeout(4500000);
+			Connection conList = Jsoup.connect(url).header("User-Agent", "chrome").timeout(4500000).proxy("BJC-S-TMG.synnex.org",8080);
 			Response listResp = conList.execute();
 			Document listDoc = listResp.parse();
 			return listDoc;

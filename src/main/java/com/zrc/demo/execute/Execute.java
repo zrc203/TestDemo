@@ -1,7 +1,5 @@
 package com.zrc.demo.execute;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -15,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -34,12 +30,7 @@ import org.springframework.util.Base64Utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
 import com.zrc.demo.service.AreaService;
-import com.zrc.demo.util.MatrixToImageWriter;
 
 public class Execute {
 	public static void main(String[] args)  {
@@ -162,26 +153,6 @@ class Music implements Runnable {
 		return integer.toString();
 	}
 
-	public String createQrcode(String text, String name) {
-		String qrcodeFilePath = "";
-		try {
-			int qrcodeWidth = 300;
-			int qrcodeHeight = 300;
-			String qrcodeFormat = "png";
-			HashMap<EncodeHintType, String> hints = new HashMap<EncodeHintType, String>();
-			hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-			BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, qrcodeWidth, qrcodeHeight,
-					hints);
-			BufferedImage image = new BufferedImage(qrcodeWidth, qrcodeHeight, BufferedImage.TYPE_INT_RGB);
-			File QrcodeFile = new File("D:\\1\\" + name + "." + qrcodeFormat);
-			ImageIO.write(image, qrcodeFormat, QrcodeFile);
-			MatrixToImageWriter.writeToFile(bitMatrix, qrcodeFormat, QrcodeFile);
-			qrcodeFilePath = QrcodeFile.getAbsolutePath();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return qrcodeFilePath;
-	}
 
 	public void getDownUrl() {
 		try {

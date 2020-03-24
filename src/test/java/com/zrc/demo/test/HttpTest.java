@@ -26,8 +26,11 @@ public class HttpTest {
 		List<String> urls = FileUtils.readLines(new File("D:\\aa.json"),"UTF-8");
 		Pattern pattern = Pattern.compile("http.*-\\d\\d/(.*)\\?op=OPEN");
 		for (String url : urls) {
+			url=url.replace(" ", "%20");
 			try {
 				InputStream is = t.getInputStreamByUrl(url);
+				if(is == null)
+					continue;
 				url = URLDecoder.decode(url, "UTF-8");
 				Matcher matcher = pattern.matcher(url);
 				String fileName ="";
@@ -68,6 +71,8 @@ public class HttpTest {
 		CloseableHttpResponse response = httpClient.execute(request);
 		int code = response.getStatusLine().getStatusCode();
 		System.out.println(code);
+		if (code!= 200)
+			return null;	
 		InputStream inputStream = response.getEntity().getContent();
 		return inputStream;
 	}

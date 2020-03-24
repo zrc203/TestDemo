@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class PdfExectar {
 	public static void main(String[] args) throws Exception {
-		for(File f:new File("D:\\0\\").listFiles()) {
+		for(File f:new File("E:\\0\\").listFiles()) {
 			InputStream is = new FileInputStream(f);
 			byte[] b = new byte[(int)f.length()];
 			is.read(b);
@@ -28,7 +28,7 @@ public class PdfExectar {
 				for(int i=0;i<byteArray.length;i++) {
 					pdfByte[i] = Byte.parseByte(byteArray[i]);
 				}
-				OutputStream os = new FileOutputStream("D:\\0\\"+f.getName()+".pdf");
+				OutputStream os = new FileOutputStream("E:\\0\\"+f.getName().replace(".msg", "")+".pdf");
 				os.write(pdfByte);
 				os.close();
 			}

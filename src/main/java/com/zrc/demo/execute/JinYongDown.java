@@ -2,6 +2,7 @@ package com.zrc.demo.execute;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
@@ -84,7 +85,7 @@ public class JinYongDown {
 	}
 	
 	public static Document getJsoupDoc(String url){
-		Connection con = Jsoup.connect(url).header("User-Agent", "chrome").timeout(45000000);
+		Connection con = Jsoup.connect(url).header("User-Agent", "chrome").proxy("BJC-S-TMG.synnex.org", 8080).timeout(45000000);
 		Document parse;
 		try {
 			Response execute = con.execute();

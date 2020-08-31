@@ -5,15 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PdfExectar {
 	public static void main(String[] args) throws Exception {
-		for(File f:new File("E:\\0\\").listFiles()) {
+		for(var f: Objects.requireNonNull(new File("E:\\0\\").listFiles())) {
+			if(f.getName().endsWith("pdf")) {
+				continue;
+			}
 			InputStream is = new FileInputStream(f);
 			byte[] b = new byte[(int)f.length()];
-			is.read(b);
+			int read = is.read(b);
 			StringBuilder source = new StringBuilder();
 			for (byte c : b) {
 				source.append(c);

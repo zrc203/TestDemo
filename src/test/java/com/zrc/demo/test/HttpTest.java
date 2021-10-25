@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +32,7 @@ public class HttpTest {
 				InputStream is = t.getInputStreamByUrl(url);
 				if(is == null)
 					continue;
-				url = URLDecoder.decode(url, "UTF-8");
+				url = URLDecoder.decode(url, "UTF8");
 				Matcher matcher = pattern.matcher(url);
 				String fileName ="";
 				while(matcher.find()) {
@@ -43,14 +44,12 @@ public class HttpTest {
 				os.close();
 			}catch(Exception e) {
 				e.printStackTrace();
-				continue;
 			}
 			
 		}
 	}//update fireeye template and add element del_row_by_reg for pdf template
 	public Document getDocumentByUrl(String url) throws Exception {
-		Document document = Jsoup.parse(getInputStreamByUrl(url),"UTF-8","");
-		return document;
+		return Jsoup.parse(getInputStreamByUrl(url),"UTF-8","");
 	}
 	
 	public String getStringByUrl(String url) throws Exception {
@@ -72,9 +71,8 @@ public class HttpTest {
 		int code = response.getStatusLine().getStatusCode();
 		System.out.println(code);
 		if (code!= 200)
-			return null;	
-		InputStream inputStream = response.getEntity().getContent();
-		return inputStream;
+			return null;
+		return response.getEntity().getContent();
 	}
 	
 }

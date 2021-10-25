@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class PdfExectar {
 	public static void main(String[] args) throws Exception {
-		for(var f: Objects.requireNonNull(new File("E:\\0\\").listFiles())) {
+		for(File f: Objects.requireNonNull(new File("E:\\0\\").listFiles())) {
 			if(f.getName().endsWith("pdf")) {
 				continue;
 			}

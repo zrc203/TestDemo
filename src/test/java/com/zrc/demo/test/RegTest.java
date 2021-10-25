@@ -10,8 +10,7 @@ public class RegTest {
 		RegTest test = new RegTest();
 		int n = 5;
 		List<String> posList = test.getPosList(n);
-		String[][] array = test.genArray(posList);
-		List<String[]> asList = Arrays.asList(array);
+		String[][] asList = test.genArray(posList);
 		for(String[] a:asList) {
 			List<String> b = Arrays.asList(a);
 			String line = String.join(",", b);

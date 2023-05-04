@@ -8,7 +8,7 @@ import java.util.Map;
 public class SybaseJDBC {
  public static void main(String[] args) throws Exception{
 	 Class.forName("com.sybase.jdbc4.jdbc.SybDataSource");
-	 Connection conn = DriverManager.getConnection("jdbc:sybase:Tds:HYUAT.hyvesolutions.org:5100/CIS", "cron_uat", "synnex");
+	 Connection conn = DriverManager.getConnection("jdbc:sybase:Tds:127.0.0.1:5100/CIS", "cron_uat", "****");
 	 CallableStatement cs = conn.prepareCall("{? = call rio_auto_release_to_inv(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)}");
      cs.registerOutParameter(1, Types.INTEGER);
      cs.setObject(2, 303703);

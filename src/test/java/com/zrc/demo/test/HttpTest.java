@@ -64,7 +64,7 @@ public class HttpTest {
 	
 	public InputStream getInputStreamByUrl(String url) throws Exception {
 		HttpClientBuilder builder = HttpClientBuilder.create();
-		HttpHost proxy = new HttpHost("BJC-S-TMG.synnex.org",8080);
+		HttpHost proxy = new HttpHost("",8080);
 		HttpUriRequest request= new HttpGet(url);
 		CloseableHttpClient httpClient = builder.setUserAgent("chrome").setProxy(proxy).build();
 		CloseableHttpResponse response = httpClient.execute(request);
